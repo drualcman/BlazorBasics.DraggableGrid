@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+	  <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <Authors>Sergi Ortiz Gomez</Authors>
+	  <Company>DrUalcman</Company>
+	  <Description>Simple Charts (Pie, Columns, Bars, Lines, Ring percentage) to use in Razor Projects.</Description>
+	  <Copyright>Free</Copyright>
+	  <RepositoryUrl>https://github.com/drualcman/BlazorBasics.DraggableGrid</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>Draggable Grid;blazor;blazor server; blazor webassembly</PackageTags>
+	  <PackageId>BlazorBasics.DraggableGrid</PackageId>
+	  <Product>BlazorBasics.DraggableGrid</Product>
+	  <PackageReleaseNotes>First release.</PackageReleaseNotes>
+	  <PackageProjectUrl>https://github.com/drualcman/BlazorBasics.DraggableGrid</PackageProjectUrl>
+  </PropertyGroup>
+
+
+	<ItemGroup>
+		<None Include="..\LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.21" Condition="'$(TargetFramework)' == 'net8.0'" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.11" Condition="'$(TargetFramework)' == 'net9.0'" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>
