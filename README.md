@@ -197,44 +197,40 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 - Escape: Deselect current item
 
 # API Reference
+
 ## GridVisualization Component
-+-----------------------+---------------------------+---------------------------------------+-------------------------+
-| Parameter	            | Type	                    | Description	                        | Default                 | 
-+-----------------------+---------------------------+---------------------------------------+-------------------------+
-| Layout	            | GridLayout	            | Grid configuration and items	        | new GridLayout()        |
-| ChildContent          | RenderFragment<TData>	    | Template for rendering item content	| null                    |
-| SelectedItem	        | GridItem	                | Currently selected item	            | null                    |
-| SelectedItemChanged	| EventCallback<GridItem?>	| Fires when selection changes	        | -                       |
-| LayoutChanged	        | EventCallback<GridLayout>	| Fires when layout changes	            | -                       |
-| OnItemRemoved	        | EventCallback<GridItem>	| Fires when item is removed	        | -                       |
-| AllowKeyboardControls	| bool	                    | Enable keyboard navigation	        | true                    |
-| Theme	                | GridTheme	                | Color theme configuration	            | GridTheme.Default       |
-+-----------------------+---------------------------+---------------------------------------+-------------------------+
+
+| Parameter               | Type                        | Description                                      | Default            |
+|-------------------------|-----------------------------|--------------------------------------------------|--------------------|
+| `Layout`                | `GridLayout`                | Grid configuration and items                     | `new GridLayout()` |
+| `ChildContent`          | `RenderFragment<TData>`     | Template for rendering item content              | `null`             |
+| `SelectedItem`          | `GridItem?`                 | Currently selected item                          | `null`             |
+| `SelectedItemChanged`   | `EventCallback<GridItem?>`  | Fires when selection changes                     | -                  |
+| `LayoutChanged`         | `EventCallback<GridLayout>` | Fires when layout changes                        | -                  |
+| `OnItemRemoved`         | `EventCallback<GridItem>`   | Fires when an item is removed                    | -                  |
+| `AllowKeyboardControls` | `bool`                      | Enable keyboard navigation and selection         | `true`             |
+| `Theme`                 | `GridTheme`                 | Color theme configuration                        | `GridTheme.Default`|
 
 ## GridLayout Model
 
-+-----------------------+---------------------------+---------------------------------------+-----------------------+
-| Property	            | Type	                    | Description	                        | Default               | 
-+-----------------------+---------------------------+---------------------------------------+-----------------------+
-| Columns	            | int	                    | Number of grid columns	            | 8                     |
-| Rows                  | int	                    | Number of grid rows	                | 10                    |
-| CellSize	            | int	                    | Size of each cell in pixels	        | 60                    |
-| Gap	                | int	                    | Gap between cells in pixels	        | 5                     |
-| Items		            | List<GridItem>	        | Collection of grid items	            | new()                 |
-+-----------------------+---------------------------+---------------------------------------+-----------------------+
+| Property      | Type               | Description                               | Default |
+|---------------|--------------------|-------------------------------------------|---------|
+| `Columns`     | `int`              | Number of grid columns                    | `8`     |
+| `Rows`        | `int`              | Number of grid rows                       | `10`    |
+| `CellSize`    | `int`              | Size of each cell in pixels               | `60`    |
+| `Gap`         | `int`              | Gap between cells in pixels               | `5`     |
+| `Items`       | `List<GridItem>`   | Collection of grid items                  | `new()` |
 
 ## GridItem Model
 
-+-----------------------+---------------------------+-------------------------------------------+
-| Property	            | Type	                    | Description	                            | 
-+-----------------------+---------------------------+-------------------------------------------+
-| Id	                | Guid	                    | Unique identifier	                        |
-| Data                  | object	                | Item data (use GetData<T>() to retrieve)	|
-| Column	            | int	                    | Starting column (1-based)	                |
-| Row	                | int	                    | Starting row (1-based)	                |
-| ColumnSpan		    | int	                    | Number of columns the item spans          |
-| RowSpan		        | int	                    | Number of rows the item spans	            |
-+-----------------------+---------------------------+-------------------------------------------+
+| Property     | Type      | Description                                              |
+|--------------|-----------|----------------------------------------------------------|
+| `Id`         | `Guid`    | Unique identifier                                        |
+| `Data`       | `object`  | Item data (use `GetData<T>()` to retrieve typed data)    |
+| `Column`     | `int`     | Starting column (1-based)                                |
+| `Row`        | `int`     | Starting row (1-based)                                   |
+| `ColumnSpan` | `int`     | Number of columns the item spans (default: 1)            |
+| `RowSpan`    | `int`     | Number of rows the item spans (default: 1)               |
 
 ## Public Methods
 ```csharp
