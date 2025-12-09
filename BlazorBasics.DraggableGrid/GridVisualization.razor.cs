@@ -109,6 +109,7 @@ public partial class GridVisualization<TData> : IDisposable
     {
         if (SelectedItem?.Id == item.Id)
             return;
+        SelectedItem = item;
 
         await SelectedItemChanged.InvokeAsync(item);
     }
