@@ -208,7 +208,8 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 | `SelectedItemChanged`   | `EventCallback<GridItem?>`  | Fires when selection changes                     | -                  |
 | `LayoutChanged`         | `EventCallback<GridLayout>` | Fires when layout changes                        | -                  |
 | `OnItemRemoved`         | `EventCallback<GridItem>`   | Fires when an item is removed                    | -                  |
-| `AllowKeyboardControls` | `bool`                      | Enable keyboard navigation and selection         | `true`             |
+| `AllowDragAndDrop`      | `bool`                      | Enable drag and drop                             | `true`             |
+| `AllowKeyboardControls` | `bool`                      | Enable keyboard navigation                       | `false`            |
 | `Theme`                 | `GridTheme`                 | Color theme configuration                        | `GridTheme.Default`|
 
 ## GridLayout Model
