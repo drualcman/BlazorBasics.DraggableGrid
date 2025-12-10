@@ -6,18 +6,22 @@ internal class DragState
     public bool IsDragging { get; set; }
     public string? DragCursorClass { get; set; }
     public (int ClientX, int ClientY)? DragStartMouse { get; set; }
+    public (int X, int Y)? DragCurrentMouse { get; set; }
     public (int Col, int Row)? DragStartCell { get; set; }
     public (int Col, int Row)? HoverTarget { get; set; }
     public (int Col, int Row)? FinalDropTarget { get; set; }
+    public bool DragMoved { get; set; }
 
     public void Reset()
     {
         DraggingItem = null;
         IsDragging = false;
+        DragMoved = false;
         DragCursorClass = null;
-        DragStartMouse = null;
+        DragStartMouse = (0, 0);
         DragStartCell = null;
         HoverTarget = null;
         FinalDropTarget = null;
+        DragCurrentMouse = null;
     }
 }

@@ -1,28 +1,18 @@
 ﻿.draggable-grid-container {
-    /* Variables por defecto */
-    --grid-bg: #f8f9fa;
-    --grid-border: #dee2e6;
-    --item-border: #333;
-    --item-shadow: rgba(0, 0, 0, 0.1);
-    --hover-shadow: rgba(0, 0, 0, 0.15);
+    --grid-bg: transparent;
+    --grid-border: transparent;
+    --item-border: transparent;
+    --item-shadow: none;
+    --hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --selected-color: #007bff;
-    --selected-glow: rgba(0, 123, 255, 0.3);
+    --selected-glow: rgba(0, 123, 255, 0.25);
     --dragging-color: #ff6b6b;
     --dragging-glow: rgba(255, 107, 107, 0.3);
-    --drop-area-color: #00b7ff;
-    --drop-area-bg: rgba(0, 183, 255, 0.2);
-    --drop-area-glow: rgba(0, 183, 255, 0.3);
-    --drop-area-light-glow: rgba(0, 183, 255, 0.1);
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    outline: none;
+    --drop-area-color: #00b894;
+    --drop-area-bg: rgba(0, 184, 148, 0.15);
+    --drop-area-glow: rgba(0, 184, 148, 0.35);
+    --drop-area-light-glow: rgba(0, 184, 148, 0.1);
 }
-
-    .draggable-grid-container:focus {
-        outline: 2px solid var(--selected-color);
-        outline-offset: 2px;
-    }
 
     .draggable-grid-container.dragging {
         cursor: grabbing;
@@ -31,11 +21,6 @@
 .draggable-grid {
     position: relative;
     background: var(--grid-bg);
-    border: 3px solid var(--grid-border);
-    border-radius: 12px;
-    padding: 15px;
-    margin: 20px 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     user-select: none;
 }
 

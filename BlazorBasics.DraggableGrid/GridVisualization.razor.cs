@@ -8,7 +8,8 @@ public partial class GridVisualization<TData> : IDisposable
     [Parameter] public EventCallback<GridItem?> SelectedItemChanged { get; set; }
     [Parameter] public EventCallback<GridLayout> LayoutChanged { get; set; }
     [Parameter] public EventCallback<GridItem> OnItemRemoved { get; set; }
-    [Parameter] public bool AllowKeyboardControls { get; set; } = true;
+    [Parameter] public bool AllowDragAndDrop { get; set; } = true;
+    [Parameter] public bool AllowKeyboardControls { get; set; } = false;
     [Parameter] public GridTheme Theme { get; set; } = GridTheme.Default;
 
     private DragState _dragState = new();
@@ -58,46 +59,78 @@ public partial class GridVisualization<TData> : IDisposable
         return _styleService.GetItemStyle(item, isSelected, isDragging);
     }
 
-    private async Task StartMouseDrag(MouseEventArgs e, GridItem item)
+    private async Task StartMouseDown(MouseEventArgs e, GridItem item)
     {
         _dragState.DraggingItem = item;
-        await SelectItem(item);
+        if (!AllowDragAndDrop)
+            return;
+        _dragState.IsDragging = false;
+        _dragState.DragMoved = false;
 
-        _dragState.IsDragging = true;
-        _dragState.DragCursorClass = "dragging";
-        _dragState.DragStartMouse = ((int)e.ClientX, (int)e.ClientY);
+        (int x, int y) start = ((int)e.ClientX, (int)e.ClientY);
+        _dragState.DragStartMouse = start;
+        _dragState.DragCurrentMouse = start;
         _dragState.DragStartCell = (item.Column, item.Row);
-
-        await InvokeAsync(StateHasChanged);
+        _dragState.DragCursorClass = "dragging";
     }
 
     private async Task HandleMouseMove(MouseEventArgs e)
     {
-        if (!_dragState.IsDragging || _dragState.DraggingItem == null)
+        if (_dragState.DraggingItem == null)
             return;
 
-        _dragState.FinalDropTarget = _dragService.CalculateDragTarget(e, _dragState, _dragState.DraggingItem);
+        (int x, int y) current = ((int)e.ClientX, (int)e.ClientY);
+        _dragState.DragCurrentMouse = current;
 
-        if (_dragState.FinalDropTarget.HasValue)
+        int deltaX = Math.Abs(current.x - _dragState.DragStartMouse?.ClientX ?? 0);
+        int deltaY = Math.Abs(current.y - _dragState.DragStartMouse?.ClientY ?? 0);
+
+        bool movedEnough = deltaX > 3 || deltaY > 3;
+
+        if (movedEnough)
         {
-            (int col, int row) = _dragState.FinalDropTarget.Value;
-            _dragState.HoverTarget = (col, row);
-            await InvokeAsync(StateHasChanged);
+            _dragState.DragMoved = true;
+            _dragState.IsDragging = true;
+
+            GridItem draggingItem = _dragState.DraggingItem;
+            _dragState.FinalDropTarget = _dragService.CalculateDragTarget(e, _dragState, draggingItem);
+
+            if (_dragState.FinalDropTarget.HasValue)
+            {
+                (int col, int row) = _dragState.FinalDropTarget.Value;
+                _dragState.HoverTarget = (col, row);
+                await InvokeAsync(StateHasChanged);
+            }
         }
     }
 
     private async Task HandleMouseUp(MouseEventArgs e)
     {
-        if (_dragState.IsDragging && _dragState.DraggingItem != null &&
+        if (_dragState.IsDragging && _dragState.DraggingItem is not null &&
             _dragState.FinalDropTarget.HasValue)
         {
-            (int col, int row) = _dragState.FinalDropTarget.Value;
-            await _placementService.PlaceItemAsync(_dragState.DraggingItem, col, row);
+            (int col, int row) target = _dragState.FinalDropTarget.Value;
+
+            await _placementService.PlaceItemAsync(_dragState.DraggingItem, target.col, target.row);
+            SelectedItem = null;
             await LayoutChanged.InvokeAsync(Layout);
+        }
+        else
+        {
+            if (_dragState.DragMoved == false && _dragState.DraggingItem is not null)
+            {
+                if (SelectedItem is not null && SelectedItem.Id == _dragState.DraggingItem.Id)
+                    SelectedItem = null;
+                else
+                    SelectedItem = _dragState.DraggingItem;
+
+                await SelectedItemChanged.InvokeAsync(SelectedItem);
+            }
         }
 
         await CleanUpDrag();
     }
+
 
     private async Task CleanUpDrag()
     {
@@ -105,30 +138,13 @@ public partial class GridVisualization<TData> : IDisposable
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task SelectItem(GridItem item)
-    {
-        if (SelectedItem?.Id == item.Id)
-            return;
-        SelectedItem = item;
-
-        await SelectedItemChanged.InvokeAsync(item);
-    }
-
     private async Task CellClicked(int col, int row)
     {
         if (_dragState.IsDragging)
             return;
 
-        GridItem? itemAtCell = _collisionService.FindItemAtPosition(col, row);
-
-        if (itemAtCell != null)
-        {
-            await SelectItem(itemAtCell);
-            return;
-        }
-
         // Si no hay item, mover el seleccionado si existe
-        if (SelectedItem != null)
+        if (SelectedItem is not null)
         {
             await MoveSelectedItem(col, row);
         }
@@ -136,7 +152,7 @@ public partial class GridVisualization<TData> : IDisposable
 
     private async Task MoveSelectedItem(int targetCol, int targetRow)
     {
-        if (SelectedItem == null)
+        if (SelectedItem is null)
             return;
 
         await _placementService.PlaceItemAsync(SelectedItem, targetCol, targetRow);
@@ -146,7 +162,7 @@ public partial class GridVisualization<TData> : IDisposable
 
     private async Task MoveSelectedItemByDelta(int deltaCol, int deltaRow)
     {
-        if (SelectedItem == null)
+        if (SelectedItem is null)
             return;
 
         int newCol = SelectedItem.Column + deltaCol;
@@ -176,7 +192,7 @@ public partial class GridVisualization<TData> : IDisposable
                 break;
             case "Delete":
             case "Backspace":
-                if (SelectedItem != null)
+                if (SelectedItem is not null)
                 {
                     await OnItemRemoved.InvokeAsync(SelectedItem);
                 }
@@ -185,7 +201,7 @@ public partial class GridVisualization<TData> : IDisposable
                 await SelectedItemChanged.InvokeAsync(null);
                 break;
             case " ":
-                if (SelectedItem != null)
+                if (SelectedItem is not null)
                 {
                     await SelectedItemChanged.InvokeAsync(null);
                 }
@@ -210,15 +226,13 @@ public partial class GridVisualization<TData> : IDisposable
     // Métodos públicos para que el padre pueda controlar el grid
     public async Task MoveItem(int col, int row)
     {
-        if (SelectedItem == null)
+        if (SelectedItem is null)
             return;
         await MoveSelectedItem(col, row);
     }
 
-    public async Task MoveItemByDelta(int deltaCol, int deltaRow)
-    {
+    public async Task MoveItemByDelta(int deltaCol, int deltaRow) =>
         await MoveSelectedItemByDelta(deltaCol, deltaRow);
-    }
 
     public async Task ResizeItemWidth(GridItem item, int delta)
     {
@@ -284,10 +298,9 @@ public partial class GridVisualization<TData> : IDisposable
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task DeselectItem()
-    {
+    public async Task DeselectItem() =>
         await SelectedItemChanged.InvokeAsync(null);
-    }
+
 
     public void Dispose()
     {

@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Authors>Sergi Ortiz Gomez</Authors>
@@ -16,7 +16,7 @@
 		<PackageTags>Draggable Grid;blazor;blazor server; blazor webassembly</PackageTags>
 		<PackageId>BlazorBasics.DraggableGrid</PackageId>
 		<Product>BlazorBasics.DraggableGrid</Product>
-		<PackageReleaseNotes>First release.</PackageReleaseNotes>
+		<PackageReleaseNotes>Add AllowDragAndDrop parameter fro can disable the drag and drop and only use with keyboard if enabled or only use from a external control. Removed all borders and backgrond style to be manage by parent. Add more themes.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/drualcman/BlazorBasics.DraggableGrid</PackageProjectUrl>
 	</PropertyGroup>
 

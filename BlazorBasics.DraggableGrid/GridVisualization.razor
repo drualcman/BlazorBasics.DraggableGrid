@@ -16,26 +16,54 @@
             var target = _dragState.FinalDropTarget.Value;
             <div class="drop-area-highlight"
                  style="grid-column: @target.Col / span @_dragState.DraggingItem.ColumnSpan;
-                            grid-row: @target.Row / span @_dragState.DraggingItem.RowSpan;
-                            pointer-events: none;">
+                                    grid-row: @target.Row / span @_dragState.DraggingItem.RowSpan;
+                                    pointer-events: none;">
             </div>
         }
+
+        <!-- Dibujamos todas las celdas, pero las ocupadas son invisibles -->
+        @for (int row = 1; row <= Layout.Rows; row++)
+        {
+            @for (int col = 1; col <= Layout.Columns; col++)
+            {
+                int c = col;
+                int r = row;
+
+                bool isOccupied = _occupiedCells.Contains((c, r));
+
+                // Calcula si esta celda está en el área de drop del elemento que se está arrastrando
+                bool isInDropArea = false;
+                if (_dragState.IsDragging && _dragState.DraggingItem != null && _dragState.FinalDropTarget.HasValue)
+                {
+                    var dropCells = _placementService.GetItemCells(_dragState);
+                    isInDropArea = dropCells.Contains((c, r));
+                }
+                <div class="grid-cell @(isInDropArea ? "drop-target" : "")"
+                     style="grid-column: @c; grid-row: @r; @(isOccupied && !isInDropArea ? "visibility: hidden;" : "")"
+                     @onclick:preventDefault
+                     @onclick="@(() => CellClicked(c, r))">
+                </div>
+            }
+        }
+
 
         <!-- Elementos del grid -->
         @foreach (var item in Layout.Items.OrderBy(i => i.Row).ThenBy(i => i.Column))
         {
-            <div class="grid-item"
-                 style="@GetItemStyle(item)"
-                 @onmousedown="@((e) => StartMouseDrag(e, item))"
-                 @onclick:preventDefault
-                 @onclick="@(() => SelectItem(item))">
+            <div class="grid-item" style="@GetItemStyle(item)"
+                 @onmousedown="@((e) => StartMouseDown(e, item))"
+                 @onmouseup="HandleMouseUp"
+                 @onmousemove="HandleMouseMove"
+                 @onclick:preventDefault>
 
-                @if (item.IsDataOfType<TData>())
+                @if (ChildContent is not null)
                 {
-                    @ChildContent(item.GetData<TData>())
+                    if (item.IsDataOfType<TData>())
+                    {
+                        @ChildContent(item.GetData<TData>())
+                    }
                 }
             </div>
         }
     </div>
 </div>
-
