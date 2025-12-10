@@ -63,8 +63,9 @@ In your _Imports.razor:
     {
         Columns = 8,
         Rows = 10,
-        CellSize = 80,
-        Gap = 10,
+        Gap = "24px",
+        ColumnSize = "minmax(50px, 1fr)",
+        RowSize = "auto"
         Items = new List<GridItem>
         {
             new GridItem 
@@ -214,13 +215,14 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 
 ## GridLayout Model
 
-| Property      | Type               | Description                               | Default |
-|---------------|--------------------|-------------------------------------------|---------|
-| `Columns`     | `int`              | Number of grid columns                    | `8`     |
-| `Rows`        | `int`              | Number of grid rows                       | `10`    |
-| `CellSize`    | `int`              | Size of each cell in pixels               | `60`    |
-| `Gap`         | `int`              | Gap between cells in pixels               | `5`     |
-| `Items`       | `List<GridItem>`   | Collection of grid items                  | `new()` |
+| Property      | Type               | Description                               | Default             |
+|---------------|--------------------|-------------------------------------------|---------------------|
+| `Columns`     | `int`              | Number of grid columns                    | `8`                 |
+| `Rows`        | `int`              | Number of grid rows                       | `10`                |
+| `ColumnSize`  | `string`           | Width of each cell in pixels              | `minmax(50px, 1fr)` |
+| `RowSize   `  | `string`           | Height of each cell in pixels             | `auto`              |
+| `Gap`         | `string`           | Gap between cells in pixels               | `0`                 |
+| `Items`       | `List<GridItem>`   | Collection of grid items                  | `new()`             |
 
 ## GridItem Model
 
@@ -232,6 +234,12 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 | `Row`        | `int`     | Starting row (1-based)                                   |
 | `ColumnSpan` | `int`     | Number of columns the item spans (default: 1)            |
 | `RowSpan`    | `int`     | Number of rows the item spans (default: 1)               |
+
+### Methods
+```csharp
+public T GetData<T>();
+public bool IsDataOfType<T>();
+```
 
 ## Public Methods
 ```csharp
