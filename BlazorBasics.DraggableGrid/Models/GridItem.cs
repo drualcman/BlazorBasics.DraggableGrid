@@ -2,7 +2,7 @@
 
 public class GridItem
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public object Data { get; set; }
     public int Column { get; set; } = 1;
     public int Row { get; set; } = 1;

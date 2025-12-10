@@ -8,7 +8,6 @@ public static class GridItemFactory
 
         return new GridItem
         {
-            Id = Guid.NewGuid(),
             Data = default!,
             Column = 1,
             Row = index,

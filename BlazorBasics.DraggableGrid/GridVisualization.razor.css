@@ -46,19 +46,16 @@
 }
 
 .grid-item {
-    border-radius: 8px;
-    padding: 12px;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 12px var(--item-shadow);
     transition: all 0.3s ease;
     overflow: hidden;
     min-height: 100%;
-    box-sizing: border-box;
-    border: 2px solid var(--item-border);
 }
 
     .grid-item:hover {
+        border: 2px solid var(--item-border);
         transform: translateY(-2px);
         box-shadow: 0 6px 20px var(--hover-shadow);
         z-index: 50;
@@ -66,6 +63,7 @@
     }
 
     .grid-item.selected {
+        box-sizing: border-box;
         border: 3px solid var(--selected-color) !important;
         box-shadow: 0 0 0 3px var(--selected-glow) !important;
         z-index: 100 !important;

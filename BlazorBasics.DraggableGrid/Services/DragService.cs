@@ -1,6 +1,4 @@
-﻿namespace BlazorBasics.DraggableGrid.Services;
-
-internal class DragService
+﻿internal class DragService
 {
     private readonly GridLayout _layout;
 
@@ -15,24 +13,27 @@ internal class DragService
         if (!dragState.DragStartMouse.HasValue || !dragState.DragStartCell.HasValue)
             return null;
 
+        double containerWidth = _layout.Columns * 1.0; // proporción de columnas
+        double containerHeight = _layout.Rows * 1.0;   // proporción de filas
+
         (int startX, int startY) = dragState.DragStartMouse.Value;
         (int startCol, int startRow) = dragState.DragStartCell.Value;
 
         int deltaX = (int)e.ClientX - startX;
         int deltaY = (int)e.ClientY - startY;
-        int cellSizeWithGap = _layout.CellSize + _layout.Gap;
 
         if (Math.Abs(deltaX) < 8 && Math.Abs(deltaY) < 8)
             return null;
 
-        int deltaCol = CalculateDelta(deltaX, cellSizeWithGap);
-        int deltaRow = CalculateDelta(deltaY, cellSizeWithGap);
+        // proporción del delta respecto al contenedor
+        double colFraction = deltaX / containerWidth;
+        double rowFraction = deltaY / containerHeight;
 
-        int hoverCol = startCol + deltaCol;
-        int hoverRow = startRow + deltaRow;
+        int deltaCol = (int)Math.Round(colFraction * _layout.Columns);
+        int deltaRow = (int)Math.Round(rowFraction * _layout.Rows);
 
-        hoverCol = Math.Clamp(hoverCol, 1, _layout.Columns);
-        hoverRow = Math.Clamp(hoverRow, 1, _layout.Rows);
+        int hoverCol = Math.Clamp(startCol + deltaCol, 1, _layout.Columns);
+        int hoverRow = Math.Clamp(startRow + deltaRow, 1, _layout.Rows);
 
         int maxCol = _layout.Columns - draggingItem.ColumnSpan + 1;
         int maxRow = _layout.Rows - draggingItem.RowSpan + 1;
@@ -41,12 +42,5 @@ internal class DragService
         int finalRow = Math.Clamp(hoverRow, 1, maxRow);
 
         return (finalCol, finalRow);
-    }
-
-    private int CalculateDelta(int delta, int cellSizeWithGap)
-    {
-        return delta >= 0
-            ? (int)Math.Floor(delta / (double)cellSizeWithGap)
-            : (int)Math.Ceiling(delta / (double)cellSizeWithGap);
     }
 }

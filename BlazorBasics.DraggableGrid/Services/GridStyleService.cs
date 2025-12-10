@@ -14,11 +14,11 @@ internal class GridStyleService
     public string GetGridStyle()
     {
         return "display: grid; " +
-               $"grid-template-columns: repeat({_layout.Columns}, {_layout.CellSize}px); " +
-               $"grid-template-rows: repeat({_layout.Rows}, {_layout.CellSize}px); " +
-               $"gap: {_layout.Gap}px; " +
-               $"width: {_layout.Columns * (_layout.CellSize + _layout.Gap)}px; " +
-               $"min-height: {_layout.Rows * (_layout.CellSize + _layout.Gap)}px;";
+               $"grid-template-columns: repeat({_layout.Columns}, {_layout.ColumnSize}); " +
+               $"grid-template-rows: repeat({_layout.Rows}, {_layout.RowSize}); " +
+               $"gap: {_layout.Gap}; " +
+               "width: 100%; " +
+               "height: auto;";
     }
 
     public string GetItemStyle(GridItem item, bool isSelected, bool isDragging)
