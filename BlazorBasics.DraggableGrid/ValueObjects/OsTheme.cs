@@ -1,9 +1,8 @@
 ﻿namespace BlazorBasics.DraggableGrid.ValueObjects;
 
-public class OsTheme
+public partial class GridTheme
 {
-    public static GridTheme Default => new GridTheme();
-    public static GridTheme Windows11Fluent => new GridTheme
+    public static GridTheme Windows11 => new GridTheme
     {
         GridBackground = "rgba(255, 255, 255, 0.6)",       // Soft acrylic
         GridBorderColor = "rgba(200, 200, 200, 0.35)",
@@ -23,7 +22,7 @@ public class OsTheme
         DropAreaGlowColor = "rgba(10, 132, 255, 0.35)",
         DropAreaLightGlowColor = "rgba(10, 132, 255, 0.10)"
     };
-    public static GridTheme MacOSGlass => new GridTheme
+    public static GridTheme MacOS => new GridTheme
     {
         GridBackground = "rgba(255, 255, 255, 0.50)",      // Light frosted glass
         GridBorderColor = "rgba(255, 255, 255, 0.35)",

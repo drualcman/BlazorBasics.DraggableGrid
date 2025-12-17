@@ -17,11 +17,12 @@ internal class GridStyleService
                $"grid-template-columns: repeat({_layout.Columns}, {_layout.ColumnSize}); " +
                $"grid-template-rows: repeat({_layout.Rows}, {_layout.RowSize}); " +
                $"gap: {_layout.Gap}; " +
+               $"overflow: {_layout.Overflow};" +
                "width: 100%; " +
                "height: auto;";
     }
 
-    public string GetItemStyle(GridItem item, bool isSelected, bool isDragging)
+    public string GetItemStyle(GridObject item, bool isSelected, bool isDragging)
     {
         string borderColor = isSelected ? _theme.SelectedColor :
                              isDragging ? _theme.DraggingColor : "var(--item-border)";
@@ -30,11 +31,22 @@ internal class GridStyleService
         string boxShadow = isSelected ? $"0 0 0 3px {_theme.SelectedGlowColor}" :
                              isDragging ? $"0 10px 30px {_theme.DraggingGlowColor}" : "none";
 
-        return $"grid-column: {item.Column} / span {item.ColumnSpan}; " +
-               $"grid-row: {item.Row} / span {item.RowSpan}; " +
+        return $"grid-column-start: {item.Position.Column + 1}; " +
+               $"grid-column-end:  span {item.Size.Width}; " +
+               $"grid-row-start: {item.Position.Row + 1}; " +
+               $"grid-row-end: span {item.Size.Height}; " +
                $"border: {borderStyle} {borderColor}; " +
                $"box-shadow: {boxShadow}; " +
                $"z-index: {(isSelected || isDragging ? "100" : "10")};" +
                $"{(isDragging ? "opacity: 0.8; cursor: grabbing;" : "cursor: grab;")}";
+    }
+
+    public string GetCellStyle(int row, int column, bool isDragging)
+    {
+        return $"grid-column-start: {column + 1}; " +
+               $"grid-column-end:  {column + 1}; " +
+               $"grid-row-start: {row + 1}; " +
+               $"grid-row-end: {row + 1}; " +
+               (isDragging ? $"pointer-events: none;" : "");
     }
 }

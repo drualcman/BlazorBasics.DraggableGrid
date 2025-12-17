@@ -1,8 +1,7 @@
 ﻿namespace BlazorBasics.DraggableGrid.ValueObjects;
 
-public class BootstrapTheme
+public partial class GridTheme
 {
-    public static GridTheme Default => new GridTheme();
 
     public static GridTheme BootstrapPrimary => new GridTheme
     {

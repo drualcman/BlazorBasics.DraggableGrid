@@ -2,14 +2,13 @@
 
 internal class DragState
 {
-    public GridItem? DraggingItem { get; set; }
+    public GridObject? DraggingItem { get; set; }
     public bool IsDragging { get; set; }
     public string? DragCursorClass { get; set; }
-    public (int ClientX, int ClientY)? DragStartMouse { get; set; }
-    public (int X, int Y)? DragCurrentMouse { get; set; }
-    public (int Col, int Row)? DragStartCell { get; set; }
-    public (int Col, int Row)? HoverTarget { get; set; }
-    public (int Col, int Row)? FinalDropTarget { get; set; }
+    public GridPosition? DragStartMouse { get; set; }
+    public GridPosition? DragCurrentMouse { get; set; }
+    public GridPosition? DragStartCell { get; set; }
+    public GridPosition? HoverTarget { get; set; }
     public bool DragMoved { get; set; }
 
     public void Reset()
@@ -18,10 +17,9 @@ internal class DragState
         IsDragging = false;
         DragMoved = false;
         DragCursorClass = null;
-        DragStartMouse = (0, 0);
+        DragStartMouse = new();
         DragStartCell = null;
         HoverTarget = null;
-        FinalDropTarget = null;
         DragCurrentMouse = null;
     }
 }

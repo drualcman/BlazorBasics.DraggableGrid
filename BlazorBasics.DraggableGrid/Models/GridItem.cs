@@ -1,13 +1,13 @@
 ﻿namespace BlazorBasics.DraggableGrid.Models;
 
-public class GridItem
+public sealed class GridItem : GridObject
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public GridItem(GridPosition position, GridSize size, string id = "")
+       : base(id, position, size)
+    {
+    }
+
     public object Data { get; set; }
-    public int Column { get; set; } = 1;
-    public int Row { get; set; } = 1;
-    public int ColumnSpan { get; set; } = 1;
-    public int RowSpan { get; set; } = 1;
 
     // Métodos helper para tipado seguro
     public T GetData<T>() => (T)Data!;

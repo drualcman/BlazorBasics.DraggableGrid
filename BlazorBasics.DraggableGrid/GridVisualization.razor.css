@@ -29,20 +29,7 @@
     border: 3px dashed var(--drop-area-color);
     border-radius: 8px;
     z-index: 90;
-    animation: dropPulse 1.5s ease-in-out infinite;
     box-shadow: 0 0 15px var(--drop-area-glow);
-}
-
-@keyframes dropPulse {
-    0%, 100% {
-        box-shadow: 0 0 0 3px var(--drop-area-glow);
-        transform: scale(1);
-    }
-
-    50% {
-        box-shadow: 0 0 0 8px var(--drop-area-light-glow);
-        transform: scale(1.02);
-    }
 }
 
 .grid-item {
@@ -51,12 +38,10 @@
     box-shadow: 0 4px 12px var(--item-shadow);
     transition: all 0.3s ease;
     overflow: hidden;
-    min-height: 100%;
 }
 
     .grid-item:hover {
         border: 2px solid var(--item-border);
-        transform: translateY(-2px);
         box-shadow: 0 6px 20px var(--hover-shadow);
         z-index: 50;
         cursor: grab;

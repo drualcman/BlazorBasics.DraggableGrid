@@ -1,8 +1,7 @@
 ﻿namespace BlazorBasics.DraggableGrid.ValueObjects;
 
-public class BulmaTheme
+public partial class GridTheme
 {
-    public static GridTheme Default => new GridTheme();
 
     public static GridTheme BulmaPrimary => new GridTheme
     {

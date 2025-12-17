@@ -1,29 +1,7 @@
 ﻿namespace BlazorBasics.DraggableGrid.ValueObjects;
 
-public class MaterialTheme
+public partial class GridTheme
 {
-    public static GridTheme Default => new GridTheme();
-
-    public static GridTheme Glass => new GridTheme
-    {
-        GridBackground = "rgba(255, 255, 255, 0.20)",
-        GridBorderColor = "rgba(255, 255, 255, 0.30)",
-
-        ItemBorderColor = "rgba(255, 255, 255, 0.25)",
-        ItemShadowColor = "0 8px 32px rgba(0, 0, 0, 0.20)",
-        ItemHoverShadowColor = "0 12px 50px rgba(0, 0, 0, 0.30)",
-
-        SelectedColor = "rgba(255, 255, 255, 0.40)",
-        SelectedGlowColor = "rgba(255, 255, 255, 0.45)",
-
-        DraggingColor = "rgba(255, 255, 255, 0.50)",
-        DraggingGlowColor = "rgba(255, 255, 255, 0.40)",
-
-        DropAreaColor = "rgba(255, 255, 255, 0.45)",
-        DropAreaBackground = "rgba(255, 255, 255, 0.10)",
-        DropAreaGlowColor = "rgba(255, 255, 255, 0.30)",
-        DropAreaLightGlowColor = "rgba(255, 255, 255, 0.05)"
-    };
     public static GridTheme Neumorphism => new GridTheme
     {
         GridBackground = "#e0e5ec",

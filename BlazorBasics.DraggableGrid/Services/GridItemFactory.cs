@@ -6,13 +6,9 @@ public static class GridItemFactory
     {
         var random = new Random();
 
-        return new GridItem
+        return new GridItem(new GridPosition(index, 1), new GridSize(2, 2))
         {
-            Data = default!,
-            Column = 1,
-            Row = index,
-            ColumnSpan = 2,
-            RowSpan = 2
+            Data = default!
         };
     }
 }
