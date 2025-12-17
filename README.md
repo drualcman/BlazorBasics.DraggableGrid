@@ -238,11 +238,6 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 | `Width`      | `int`          | Number of columns  |
 | `Height`     | `int`          | Number of rows     |
 
-### Methods
-```csharp
-public T GetData<T>();
-public bool IsDataOfType<T>();
-```
 
 ## Public Methods
 ```csharp
@@ -263,13 +258,9 @@ await gridRef.DeselectItem();            // Deselect current item
 ```csharp
 private void AddNewItem()
 {
-    var newItem = new GridItem
+    var newItem = new GridItem(new GridPosition(0,0), new GridSize(2,2))
     {
-        Data = new MyDataType { /* your data */ },
-        Column = 1,
-        Row = 1,
-        ColumnSpan = 2,
-        RowSpan = 1
+        Data = new MyDataType { /* your data */ }
     };
     
     _layout.Items.Add(newItem);
