@@ -24,7 +24,7 @@ public abstract class GridObject
         Size = size;
     }
 
-    public void SetSize(GridSize newSize)
+    public void Resize(GridSize newSize)
     {
         Size = newSize;
     }
@@ -50,11 +50,6 @@ public abstract class GridObject
         Position = newPosition;
     }
 
-    public virtual void Resize(GridSize newSize)
-    {
-        Size = newSize;
-    }
-
     public bool IsEmptyObject() =>
         IdBF.Substring(0, 1).Equals("_");
 
@@ -69,59 +64,10 @@ public abstract class GridObject
     }
 
     public override string ToString() =>
-        $"ID: {Id}, Posición: {Position}, Tamaño: {Size}";
+        $"ID: {Id}, Position: {Position}, Size: {Size}";
 
     public override int GetHashCode()
     {
         return base.GetHashCode();
-    }
-
-    public GridObject GetLargerObject(GridObject other, Direction direction)
-    {
-        GridObject result = this;
-
-        if (direction == Direction.Up || direction == Direction.Down)
-        {
-            if (other.Size.Height > this.Size.Height)
-            {
-                result = other;
-            }
-        }
-        else if (direction == Direction.Left || direction == Direction.Right)
-        {
-            if (other.Size.Width > this.Size.Width)
-            {
-                result = other;
-            }
-        }
-        else if (direction == Direction.UpLeft || direction == Direction.UpRight ||
-                 direction == Direction.DownLeft || direction == Direction.DownRight)
-        {
-            // Compare vertical first, then horizontal
-            if (other.Size.Height > this.Size.Height)
-            {
-                result = other;
-            }
-            else if (other.Size.Height == this.Size.Height && other.Size.Width > this.Size.Width)
-            {
-                result = other;
-            }
-        }
-
-        return result;
-    }
-
-    public bool BiggerThan(GridObject other)
-    {
-        int thisArea = this.Size.Width * this.Size.Height;
-        int otherArea = other.Size.Width * other.Size.Height;
-
-        bool result = thisArea > otherArea;
-        return result;
-    }
-
-    public GridObject GetRealObject()
-    {
-        return IsEmptyObject() ? null : this;
     }
 }

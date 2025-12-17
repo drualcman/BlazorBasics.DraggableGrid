@@ -223,7 +223,7 @@ public partial class GridVisualization<TData> : IDisposable
         }
 
         int originalColSpan = item.Size.Width;
-        item.SetSize(new(newColSpan, item.Size.Height));
+        item.Resize(new(newColSpan, item.Size.Height));
         var snapshot = _gridSystem.PreviewMove(item.Id, item.Position);
         if (snapshot is not null)
         {
@@ -234,7 +234,7 @@ public partial class GridVisualization<TData> : IDisposable
             }
         }
         else
-            item.SetSize(new(originalColSpan, item.Size.Height));
+            item.Resize(new(originalColSpan, item.Size.Height));
     }
 
     public async Task ResizeItemHeight(GridItem item, int delta)
@@ -257,7 +257,7 @@ public partial class GridVisualization<TData> : IDisposable
         }
 
         int originalRowSpan = item.Size.Height;
-        item.SetSize(new(item.Size.Width, newRowSpan));
+        item.Resize(new(item.Size.Width, newRowSpan));
         var snapshot = _gridSystem.PreviewMove(item.Id, item.Position);
         if (snapshot is not null)
         {
@@ -268,12 +268,14 @@ public partial class GridVisualization<TData> : IDisposable
             }
         }
         else
-            item.SetSize(new(originalRowSpan, item.Size.Height));
+            item.Resize(new(originalRowSpan, item.Size.Height));
     }
 
-    public async Task DeselectItem() =>
+    public async Task DeselectItem()
+    {
+        SelectedItem = null;
         await SelectedItemChanged.InvokeAsync(null);
-
+    }
 
     public void Dispose()
     {

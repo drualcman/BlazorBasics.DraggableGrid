@@ -1,4 +1,4 @@
-﻿namespace BlazorBasics.DraggableGrid.Models;
+﻿namespace BlazorBasics.DraggableGrid.ValueObjects;
 
 public struct GridSize
 {

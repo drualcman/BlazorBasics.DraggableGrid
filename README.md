@@ -68,45 +68,18 @@ In your _Imports.razor:
         RowSize = "auto"
         Items = new List<GridItem>
         {
-            new GridItem 
-            { 
-                Data = new WidgetData                            // this is a object. So can receive any kind of data. WidgetData it's jusrt a sample class
-                { 
-                    Title = "Sales", 
-                    Description = "Monthly sales report",  
-                    Size = "Medium"
-                },
-                Column = 1,
-                Row = 1,
-                ColumnSpan = 2,
-                RowSpan = 2
+            new(new GridPosition(0,0), new GridSize(2,2)) {
+                Data = "Título Principal"                           // this is a type of object to store any kind of data.
             },
-            new GridItem 
-            { 
-                Data = new WidgetData
-                { 
-                    Title = "Users", 
-                    Description = "Active users dashboard",
-                    Size = "Small"
-                },
-                Column = 4,
-                Row = 1,
-                ColumnSpan = 1,
-                RowSpan = 1
+            new(new GridPosition(0,2), new GridSize(2,2)) {
+                Data = "Subtítulo o descripción breve"
             },
-            new GridItem 
-            { 
-                Data = new WidgetData 
-                { 
-                    Title = "Analytics", 
-                    Description = "Performance analytics",
-                    Size = "Large"
-                },
-                Column = 1,
-                Row = 4,
-                ColumnSpan = 3,
-                RowSpan = 3
-            }
+            new(new GridPosition(2,0), new GridSize(2,2)) {
+                Data = "Contenido principal que puede ser más largo y ocupar múltiples celdas. Ideal para mostrar información detallada."
+            },
+            new(new GridPosition(2,2), new GridSize(2,2)) {
+                Data = "Panel lateral o sidebar con información adicional"
+            },
         }
     };
     
@@ -215,25 +188,55 @@ The component supports keyboard navigation when `AllowKeyboardControls="true"`:
 
 ## GridLayout Model
 
-| Property      | Type               | Description                               | Default             |
-|---------------|--------------------|-------------------------------------------|---------------------|
-| `Columns`     | `int`              | Number of grid columns                    | `8`                 |
-| `Rows`        | `int`              | Number of grid rows                       | `10`                |
-| `ColumnSize`  | `string`           | Width of each cell in pixels              | `minmax(50px, 1fr)` |
-| `RowSize   `  | `string`           | Height of each cell in pixels             | `auto`              |
-| `Gap`         | `string`           | Gap between cells in pixels               | `0`                 |
-| `Items`       | `List<GridItem>`   | Collection of grid items                  | `new()`             |
+| Property      | Type               | Description                               | Default               |
+|---------------|--------------------|-------------------------------------------|-----------------------|
+| `Columns`     | `int`              | Number of grid columns                    | `10`                  |
+| `Rows`        | `int`              | Number of grid rows                       | `10`                  |
+| `ColumnSize`  | `string`           | Width of each cell in pixels              | `minmax(50px, 1fr)`   |
+| `RowSize   `  | `string`           | Height of each cell in pixels             | `minmax(150px, auto)` |
+| `Gap`         | `string`           | Gap between cells in pixels               | `0`                   |
+| `Overflow`    | `string`           | Overflow CSS value                        | `auto`                |
+| `Items`       | `List<GridItem>`   | Collection of grid items                  | `new()`               |
 
-## GridItem Model
+## GridItem Model inherits GridObject 
 
-| Property     | Type      | Description                                              |
-|--------------|-----------|----------------------------------------------------------|
-| `Id`         | `Guid`    | Unique identifier                                        |
-| `Data`       | `object`  | Item data (use `GetData<T>()` to retrieve typed data)    |
-| `Column`     | `int`     | Starting column (1-based)                                |
-| `Row`        | `int`     | Starting row (1-based)                                   |
-| `ColumnSpan` | `int`     | Number of columns the item spans (default: 1)            |
-| `RowSpan`    | `int`     | Number of rows the item spans (default: 1)               |
+| Property     | Type           | Description                                              |
+|--------------|----------------|----------------------------------------------------------|
+| `Data`       | `object`       | Item data (use `GetData<T>()` to retrieve typed data)    |### Methods
+### Methods
+| Name              | Type   | Description                                             |
+|-------------------|------------------------------------------------------------------|
+| GetData<T>()      | `T`    | Recover the data from the object matching the `T` type  |
+| IsDataOfType<T>() | `bool` | Check if data match with the `T` type                   |
+
+## GridObject Model
+
+| Property     | Type           | Description               |
+|--------------|----------------|---------------------------|
+| `Id`         | `srting`       | Unique identifier         |
+| `Position`   | `GridPosition` | Starting column 0 row 0   |
+| `Size`       | `GridSize`     | Starting 1x1              |
+### Methods
+| Name                                         | Type           | Description                                                         |
+|----------------------------------------------|--------------------------------------------------------------------------------------|
+| IsEmptyObject()                              | `bool`         | Inidicate this object it's only to set position is occuped          |
+| Resize(GridSize)                             | `void`         | Update size                                                         |
+| MoveTo(GridPosition)                         | `void`         | Move object to new position                                         |
+| CanReplace(GridGridObjectSize, GridPosition) | `bool`         | Know if object can be replace by sender in exact position. Can swap |
+
+## GridPosition ValueObject
+
+| Property     | Type           | Description                |
+|--------------|----------------|----------------------------|
+| `Column`     | `int`          | Starting column (0-based)  |
+| `Row`        | `int`          | Starting row (0-based)     |
+
+## GridSize ValueObject
+
+| Property     | Type           | Description        |
+|--------------|----------------|--------------------|
+| `Width`      | `int`          | Number of columns  |
+| `Height`     | `int`          | Number of rows     |
 
 ### Methods
 ```csharp
