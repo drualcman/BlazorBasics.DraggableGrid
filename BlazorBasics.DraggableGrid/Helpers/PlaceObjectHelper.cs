@@ -11,7 +11,7 @@ internal static class PlaceObjectHelper
     {
         List<GridObject> collidingObjects = GridCollitionsHelper.GetCollisions(snapshot, obj, newPosition);
 
-        if (collidingObjects.Count == 1 && allowReplace)
+        if (allowReplace)
         {
             GridObject other = collidingObjects[0];
 

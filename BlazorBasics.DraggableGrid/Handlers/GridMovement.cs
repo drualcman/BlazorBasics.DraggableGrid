@@ -81,7 +81,9 @@ internal class GridMovement(GridSystem gridSystem)
                 GridObject obj = snapshot.Cells[r, c];
                 if (obj != null && !obj.IsEmptyObject())
                 {
-                    gridSystem.Upsert(gridSystem.GetObject(obj.Id));
+                    var original = gridSystem.GetObject(obj.Id);
+                    Console.WriteLine($"Moving object {original} to {obj}");
+                    gridSystem.Upsert(original);
                 }
             }
         }

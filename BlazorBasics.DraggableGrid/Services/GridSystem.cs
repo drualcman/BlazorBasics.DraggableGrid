@@ -80,10 +80,12 @@ internal class GridSystem
     {
         if (TryGetObject(objectId, out var obj))
         {
+            Console.WriteLine($"Move {obj} to {newPosition}");
             GridSnapshot? previewSnapshot = MovementService.TryMoveObject(obj, newPosition);
 
             if (previewSnapshot != null)
             {
+                Console.WriteLine($"Moved {obj}");
                 MovementService.ApplySnapshot(previewSnapshot);
             }
         }

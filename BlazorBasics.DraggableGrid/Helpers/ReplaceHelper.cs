@@ -16,7 +16,7 @@ internal static class ReplaceHelper
             PlaceObjectHelper.TryPlaceObject(
                 replaceSnapshot, source, firstColliding.Position, direction, allowReplace: true);
             PlaceObjectHelper.TryPlaceObject(
-                replaceSnapshot, firstColliding, sourceOriginalPos, direction, allowReplace: false);
+                replaceSnapshot, firstColliding, sourceOriginalPos, MovementHelper.GetOppositeDirection(direction), allowReplace: false);
             return replaceSnapshot;
         }
         return null;

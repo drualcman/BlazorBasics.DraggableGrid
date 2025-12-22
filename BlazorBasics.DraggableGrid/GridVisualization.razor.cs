@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace BlazorBasics.DraggableGrid;
 
 public partial class GridVisualization<TData> : IDisposable
@@ -15,9 +17,16 @@ public partial class GridVisualization<TData> : IDisposable
     private DragState _dragState = new();
     private GridSystem _gridSystem;
     private GridStyleService _styleService;
+    private bool _initialized = false;
 
     protected override void OnParametersSet()
     {
+        if (!_initialized)
+        {
+            _initialized = true;
+        }
+        string data = JsonSerializer.Serialize(Layout);
+        Console.WriteLine($"GridVisualization OnParametersSet: {data}");
         InitializeServices();
     }
 
@@ -143,6 +152,7 @@ public partial class GridVisualization<TData> : IDisposable
 
     private async Task MoveSelectedItem(int targetRow, int targetCol)
     {
+        Console.WriteLine($"MoveSelectedItem SelectedItem: '{SelectedItem?.Id}', targetRow: {targetRow}, targetCol: {targetCol}");
         if (_gridSystem.Move(SelectedItem?.Id, new GridPosition(targetRow, targetCol)))
         {
             await LayoutChanged.InvokeAsync(Layout);
@@ -151,12 +161,16 @@ public partial class GridVisualization<TData> : IDisposable
 
     public async Task MoveItemByDelta(int deltaRow, int deltaCol)
     {
+        Console.WriteLine($"MoveItemByDelta SelectedItem is null = {SelectedItem is null}");
         if (SelectedItem is null)
             return;
+        Console.WriteLine($"MoveItemByDelta deltaRow: {deltaRow}, deltaCol: {deltaCol}");
 
         int newCol = SelectedItem.Position.Column + deltaCol;
         int newRow = SelectedItem.Position.Row + deltaRow;
 
+        Console.WriteLine($"MoveItemByDelta SelectedItem.Position.Row: {SelectedItem.Position.Row}, SelectedItem.Position.Column: {SelectedItem.Position.Column}");
+        Console.WriteLine($"MoveItemByDelta newRow: {newRow}, newCol: {newCol}");
         await MoveSelectedItem(newRow, newCol);
         await InvokeAsync(StateHasChanged);
     }
@@ -165,7 +179,7 @@ public partial class GridVisualization<TData> : IDisposable
     {
         if (!AllowKeyboardControls)
             return;
-
+        Console.WriteLine($"HandleKeyDown: {e.Key}");
         switch (e.Key)
         {
             case "ArrowUp":
