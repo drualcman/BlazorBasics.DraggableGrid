@@ -68,17 +68,17 @@ In your _Imports.razor:
         RowSize = "auto"
         Items = new List<GridItem>
         {
-            new(new GridPosition(0,0), new GridSize(2,2)) {
-                Data = "Título Principal"                           // this is a type of object to store any kind of data.
+            new(new Grid Position(0,0), new Grid Size(2,2)) {
+            Data = "Main Title" // This is an object type to store any type of data.
             },
-            new(new GridPosition(0,2), new GridSize(2,2)) {
-                Data = "Subtítulo o descripción breve"
+            new(new Grid Position(0,2), new Grid Size(2,2)) {
+            Data = "Subtitle or brief description"
             },
-            new(new GridPosition(2,0), new GridSize(2,2)) {
-                Data = "Contenido principal que puede ser más largo y ocupar múltiples celdas. Ideal para mostrar información detallada."
+            new(new Grid Position(2,0), new Grid Size(2,2)) {
+            Data = "Main content that can be longer and occupy multiple cells. Ideal for displaying detailed information."
             },
-            new(new GridPosition(2,2), new GridSize(2,2)) {
-                Data = "Panel lateral o sidebar con información adicional"
+            new(new Grid Position(2,2), new Grid Size(2,2)) {
+            Data = "Side panel or sidebar with additional information"
             },
         }
     };
@@ -334,7 +334,7 @@ private void AddNewItem()
             <div class="admin-widget">
                 <div class="widget-header">
                     <span>@widget.Name</span>
-                    <button @onclick="() => RemoveWidget(widget)">×</button>
+                    <button @onclick="() => RemoveWidget(widget)">X</button>
                 </div>
                 <div class="widget-body">
                     @widget.Content

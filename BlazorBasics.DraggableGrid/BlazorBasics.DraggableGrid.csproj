@@ -16,7 +16,7 @@
 		<PackageTags>Draggable Grid;blazor;blazor server; blazor webassembly</PackageTags>
 		<PackageId>BlazorBasics.DraggableGrid</PackageId>
 		<Product>BlazorBasics.DraggableGrid</Product>
-		<PackageReleaseNotes>New grid management system. New objects to control position and size.</PackageReleaseNotes>
+		<PackageReleaseNotes>Full new grid management. Changes in GridLayout and GridItem. New objects to control position and size.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/drualcman/BlazorBasics.DraggableGrid</PackageProjectUrl>
 	</PropertyGroup>
 
