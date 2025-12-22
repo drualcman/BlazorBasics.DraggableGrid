@@ -1,9 +1,9 @@
 ﻿@typeparam TData
 <div class="draggable-grid-container @(_dragState.IsDragging ? "dragging" : "")"
      style="@GetThemeStyles()"
-     @onkeydown="HandleKeyDown"
-     @onmouseup="HandleMouseUp"
+     @onkeydown="HandleKeyDown"   
      @onmouseleave="CleanUpDrag"
+     @onclick:preventDefault
      tabindex="0">
 
     <div class="draggable-grid"
@@ -55,7 +55,7 @@
                         <div class="grid-cell drop-area-highlight"
                              style="@GetItemStyle(item)"
                              @onmouseup="HandleMouseUp"
-                             @onmousemove="() => HandleMouseMove(r, c)"
+                             @onmousemove="() => HandleMouseMove(r, c)"    
                              @onclick:preventDefault>
 
                             @if (ChildContent is not null && item.IsDataOfType<TData>())
@@ -71,7 +71,7 @@
                             <div class="grid-item"
                                  style="@GetItemStyle(cell)"
                                  @onmousedown="@(() => StartMouseDown(cell))"
-                                 @onmouseup="HandleMouseUp"
+                                 @onmouseup="HandleMouseUp"  
                                  @onmousemove="() => HandleMouseMove(r, c)"
                                  @onclick:preventDefault>
 

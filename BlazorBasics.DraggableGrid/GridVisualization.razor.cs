@@ -6,7 +6,6 @@ public partial class GridVisualization<TData> : IDisposable
 {
     [Parameter] public GridLayout Layout { get; set; } = new();
     [Parameter] public RenderFragment<TData>? ChildContent { get; set; }
-    [Parameter] public GridObject? SelectedItem { get; set; }
     [Parameter] public EventCallback<GridItem?> SelectedItemChanged { get; set; }
     [Parameter] public EventCallback<GridLayout> LayoutChanged { get; set; }
     [Parameter] public EventCallback<GridItem> OnItemRemoved { get; set; }
@@ -14,6 +13,7 @@ public partial class GridVisualization<TData> : IDisposable
     [Parameter] public bool AllowKeyboardControls { get; set; } = false;
     [Parameter] public GridTheme Theme { get; set; } = GridTheme.Default;
 
+    private GridObject? SelectedItem;
     private DragState _dragState = new();
     private GridSystem _gridSystem;
     private GridStyleService _styleService;
@@ -26,7 +26,6 @@ public partial class GridVisualization<TData> : IDisposable
             _initialized = true;
         }
         string data = JsonSerializer.Serialize(Layout);
-        Console.WriteLine($"GridVisualization OnParametersSet: {data}");
         InitializeServices();
     }
 
@@ -69,21 +68,21 @@ public partial class GridVisualization<TData> : IDisposable
     private string GetCellStyle(int row, int col, bool isDragging = false) =>
         _styleService.GetCellStyle(row, col, isDragging);
 
-    private async Task StartMouseDown(GridObject item)
+    private Task StartMouseDown(GridObject item)
     {
         _dragState.DraggingItem = item;
         if (!AllowDragAndDrop)
-            return;
+            return Task.CompletedTask;
         _dragState.IsDragging = false;
         _dragState.DragMoved = false;
 
         _dragState.DragStartMouse = item.Position;
         _dragState.DragCurrentMouse = item.Position;
         _dragState.DragStartCell = item.Position;
-        await InvokeAsync(StateHasChanged);
+        return Task.CompletedTask;
     }
 
-    private async Task HandleMouseMove(int row, int col)
+    private Task HandleMouseMove(int row, int col)
     {
         if (_dragState.DraggingItem is not null)
         {
@@ -100,8 +99,7 @@ public partial class GridVisualization<TData> : IDisposable
                 _dragState.IsDragging = true;
             }
         }
-
-        await InvokeAsync(StateHasChanged);
+        return Task.CompletedTask;
     }
 
     private async Task HandleMouseUp(MouseEventArgs e)
@@ -110,6 +108,7 @@ public partial class GridVisualization<TData> : IDisposable
         {
             if (_gridSystem.Move(_dragState.DraggingItem.Id, _dragState.DragCurrentMouse.Value))
             {
+                await SelectedItemChanged.InvokeAsync(_gridSystem.GetObject(_dragState.DraggingItem.Id));
                 await LayoutChanged.InvokeAsync(Layout);
             }
             SelectedItem = null;
@@ -126,10 +125,8 @@ public partial class GridVisualization<TData> : IDisposable
                 await SelectedItemChanged.InvokeAsync(_gridSystem.GetObject(SelectedItem?.Id));
             }
         }
-
         await CleanUpDrag();
     }
-
 
     private async Task CleanUpDrag()
     {
@@ -142,7 +139,6 @@ public partial class GridVisualization<TData> : IDisposable
         if (_dragState.IsDragging)
             return;
 
-        // Si no hay item, mover el seleccionado si existe
         if (SelectedItem is not null)
         {
             await MoveSelectedItem(row, col);
@@ -152,25 +148,21 @@ public partial class GridVisualization<TData> : IDisposable
 
     private async Task MoveSelectedItem(int targetRow, int targetCol)
     {
-        Console.WriteLine($"MoveSelectedItem SelectedItem: '{SelectedItem?.Id}', targetRow: {targetRow}, targetCol: {targetCol}");
         if (_gridSystem.Move(SelectedItem?.Id, new GridPosition(targetRow, targetCol)))
         {
+            await SelectedItemChanged.InvokeAsync(_gridSystem.GetObject(SelectedItem?.Id));
             await LayoutChanged.InvokeAsync(Layout);
         }
     }
 
     public async Task MoveItemByDelta(int deltaRow, int deltaCol)
     {
-        Console.WriteLine($"MoveItemByDelta SelectedItem is null = {SelectedItem is null}");
         if (SelectedItem is null)
             return;
-        Console.WriteLine($"MoveItemByDelta deltaRow: {deltaRow}, deltaCol: {deltaCol}");
 
         int newCol = SelectedItem.Position.Column + deltaCol;
         int newRow = SelectedItem.Position.Row + deltaRow;
 
-        Console.WriteLine($"MoveItemByDelta SelectedItem.Position.Row: {SelectedItem.Position.Row}, SelectedItem.Position.Column: {SelectedItem.Position.Column}");
-        Console.WriteLine($"MoveItemByDelta newRow: {newRow}, newCol: {newCol}");
         await MoveSelectedItem(newRow, newCol);
         await InvokeAsync(StateHasChanged);
     }
@@ -179,7 +171,6 @@ public partial class GridVisualization<TData> : IDisposable
     {
         if (!AllowKeyboardControls)
             return;
-        Console.WriteLine($"HandleKeyDown: {e.Key}");
         switch (e.Key)
         {
             case "ArrowUp":
@@ -202,16 +193,22 @@ public partial class GridVisualization<TData> : IDisposable
                 }
                 break;
             case "Escape":
+                SelectedItem = null;
+                await CleanUpDrag();
                 await SelectedItemChanged.InvokeAsync(null);
                 break;
             case " ":
                 if (SelectedItem is not null)
                 {
+                    SelectedItem = null;
+                    await CleanUpDrag();
                     await SelectedItemChanged.InvokeAsync(null);
                 }
                 else if (Layout.Items.Any())
                 {
-                    await SelectedItemChanged.InvokeAsync(Layout.Items.First());
+                    var selection = Layout.Items.First();
+                    SelectedItem = selection;
+                    await SelectedItemChanged.InvokeAsync(selection);
                 }
                 break;
         }
@@ -236,6 +233,7 @@ public partial class GridVisualization<TData> : IDisposable
             return;
         }
 
+
         int originalColSpan = item.Size.Width;
         item.Resize(new(newColSpan, item.Size.Height));
         var snapshot = _gridSystem.PreviewMove(item.Id, item.Position);
@@ -243,8 +241,8 @@ public partial class GridVisualization<TData> : IDisposable
         {
             if (_gridSystem.Move(item.Id, item.Position))
             {
+                await SelectedItemChanged.InvokeAsync(_gridSystem.GetObject(item.Id));
                 await LayoutChanged.InvokeAsync(Layout);
-                await InvokeAsync(StateHasChanged);
             }
         }
         else
@@ -277,8 +275,8 @@ public partial class GridVisualization<TData> : IDisposable
         {
             if (_gridSystem.Move(item.Id, item.Position))
             {
+                await SelectedItemChanged.InvokeAsync(_gridSystem.GetObject(item.Id));
                 await LayoutChanged.InvokeAsync(Layout);
-                await InvokeAsync(StateHasChanged);
             }
         }
         else
