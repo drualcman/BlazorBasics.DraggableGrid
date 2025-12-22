@@ -20,7 +20,7 @@
 
                 if (cell is null)
                 {
-                    GridObject occupied = _gridSystem.GetByPosition(c, r);
+                    GridObject occupied = _gridSystem.GetByPosition(r, c);
                     bool isOccupied = occupied is not null;
 
                     @if (_dragState.IsDragging && 
@@ -38,7 +38,7 @@
                              style="@GetCellStyle(r, c)"
                              @onclick:preventDefault
                              @onmousemove="() => HandleMouseMove(r, c)"
-                             @onclick="@(() => CellClicked(c, r))">
+                             @onclick="@(() => CellClicked(r, c))">
                         </div>
                     }
                 }

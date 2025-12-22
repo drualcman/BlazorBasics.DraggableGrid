@@ -128,7 +128,7 @@ public partial class GridVisualization<TData> : IDisposable
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task CellClicked(int col, int row)
+    private async Task CellClicked(int row, int col)
     {
         if (_dragState.IsDragging)
             return;
@@ -136,12 +136,12 @@ public partial class GridVisualization<TData> : IDisposable
         // Si no hay item, mover el seleccionado si existe
         if (SelectedItem is not null)
         {
-            await MoveSelectedItem(col, row);
+            await MoveSelectedItem(row, col);
         }
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task MoveSelectedItem(int targetCol, int targetRow)
+    private async Task MoveSelectedItem(int targetRow, int targetCol)
     {
         if (_gridSystem.Move(SelectedItem?.Id, new GridPosition(targetRow, targetCol)))
         {
@@ -149,7 +149,7 @@ public partial class GridVisualization<TData> : IDisposable
         }
     }
 
-    public async Task MoveItemByDelta(int deltaCol, int deltaRow)
+    public async Task MoveItemByDelta(int deltaRow, int deltaCol)
     {
         if (SelectedItem is null)
             return;
@@ -157,7 +157,7 @@ public partial class GridVisualization<TData> : IDisposable
         int newCol = SelectedItem.Position.Column + deltaCol;
         int newRow = SelectedItem.Position.Row + deltaRow;
 
-        await MoveSelectedItem(newCol, newRow);
+        await MoveSelectedItem(newRow, newCol);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -169,16 +169,16 @@ public partial class GridVisualization<TData> : IDisposable
         switch (e.Key)
         {
             case "ArrowUp":
-                await MoveItemByDelta(0, -1);
-                break;
-            case "ArrowDown":
-                await MoveItemByDelta(0, 1);
-                break;
-            case "ArrowLeft":
                 await MoveItemByDelta(-1, 0);
                 break;
-            case "ArrowRight":
+            case "ArrowDown":
                 await MoveItemByDelta(1, 0);
+                break;
+            case "ArrowLeft":
+                await MoveItemByDelta(0, -1);
+                break;
+            case "ArrowRight":
+                await MoveItemByDelta(0, 1);
                 break;
             case "Delete":
             case "Backspace":
