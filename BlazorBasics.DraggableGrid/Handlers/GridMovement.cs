@@ -82,7 +82,6 @@ internal class GridMovement(GridSystem gridSystem)
                 if (obj != null && !obj.IsEmptyObject())
                 {
                     var original = gridSystem.GetObject(obj.Id);
-                    Console.WriteLine($"Moving object {original} to {obj}");
                     gridSystem.Upsert(original);
                 }
             }
