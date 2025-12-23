@@ -16,7 +16,7 @@
 		<PackageTags>Draggable Grid;blazor;blazor server; blazor webassembly</PackageTags>
 		<PackageId>BlazorBasics.DraggableGrid</PackageId>
 		<Product>BlazorBasics.DraggableGrid</Product>
-		<PackageReleaseNotes>Removed debug lines.</PackageReleaseNotes>
+		<PackageReleaseNotes>Improved events calbacks. Fixed issue when select/unselect item with space bar. Removed debug console lines.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/drualcman/BlazorBasics.DraggableGrid</PackageProjectUrl>
 	</PropertyGroup>
 
